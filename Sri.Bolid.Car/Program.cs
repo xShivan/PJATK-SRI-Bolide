@@ -22,7 +22,16 @@ namespace Sri.Bolid.Car
 
         static void Main(string[] args)
         {
+            StartTimers();
 
+            while (true)
+            {
+                Thread.Sleep(1);
+            }
+        }
+
+        private static void StartTimers()
+        {
             Timer raceTimer = new Timer(raceTimerInterval);
             raceTimer.Elapsed += (sender, eventArgs) => raceMiliseconds += raceTimerInterval;
             raceTimer.Start();
@@ -30,11 +39,6 @@ namespace Sri.Bolid.Car
             Timer broadcastTimer = new Timer(broadcastTimerInterval);
             broadcastTimer.Elapsed += BroadcastCarParams;
             broadcastTimer.Start();
-
-            while (true)
-            {
-                Thread.Sleep(1);
-            }
         }
 
         private static void BroadcastCarParams(object sender, ElapsedEventArgs elapsedEventArgs)
