@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Timers;
+using RabbitMQ.Client;
 using Sri.Bolid.Car.Providers;
 using Sri.Bolid.Shared;
 using Timer = System.Timers.Timer;
@@ -46,6 +47,21 @@ namespace Sri.Bolid.Car
             CarParams carParams = carParamsProvider.Get();
             carParams.RaceTime = TimeSpan.FromMilliseconds(raceMiliseconds);
             Console.WriteLine(carParams.ToString());
+
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+            using (IConnection connection = factory.CreateConnection())
+            {
+                using (IModel channel = connection.CreateModel())
+                {
+                    channel.ExchangeDeclare(exchange: "topic_logs",
+                        type: "topic");
+
+                    channel.BasicPublish(exchange: "topic_logs",
+                        routingKey: "car.info",
+                        basicProperties: null,
+                        body: CarParams.Serialize(carParams));
+                }
+            }
         }
     }
 }

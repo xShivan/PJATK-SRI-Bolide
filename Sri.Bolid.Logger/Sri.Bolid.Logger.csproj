@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{919D484A-79FF-4BAA-8FF7-ECA9AB11FB54}</ProjectGuid>
+    <ProjectGuid>{01C79B79-D622-4F84-B948-9C33030C802E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Sri.Bolid.Car</RootNamespace>
-    <AssemblyName>Sri.Bolid.Car</AssemblyName>
+    <RootNamespace>Sri.Bolid.Logger</RootNamespace>
+    <AssemblyName>Sri.Bolid.Logger</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\CarParamsProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
