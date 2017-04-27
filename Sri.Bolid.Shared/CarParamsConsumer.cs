@@ -28,11 +28,11 @@ namespace Sri.Bolid.Shared
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.ExchangeDeclare(exchange: "topic_logs", type: "topic");
+                    channel.ExchangeDeclare(exchange: "car_info", type: "fanout");
                     var queueName = channel.QueueDeclare().QueueName;
                     channel.QueueBind(queue: queueName,
-                        exchange: "topic_logs",
-                        routingKey: "car.info");
+                        exchange: "car_info",
+                        routingKey: "");
 
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += this.paramsReceived;

@@ -53,11 +53,11 @@ namespace Sri.Bolid.Car
             {
                 using (IModel channel = connection.CreateModel())
                 {
-                    channel.ExchangeDeclare(exchange: "topic_logs",
-                        type: "topic");
+                    channel.ExchangeDeclare(exchange: "car_info",
+                        type: "fanout");
 
-                    channel.BasicPublish(exchange: "topic_logs",
-                        routingKey: "car.info",
+                    channel.BasicPublish(exchange: "car_info",
+                        routingKey: "",
                         basicProperties: null,
                         body: CarParams.Serialize(carParams));
                 }
