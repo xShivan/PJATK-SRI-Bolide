@@ -8,6 +8,11 @@ namespace Sri.Bolid.Shared
     [Serializable]
     public class CarParams
     {
+        public const decimal MaxPressure = 3;
+        public const decimal MinPressure = 2;
+        public const decimal MinTemperature = 50;
+        public const decimal MaxTemperature = 150;
+
         public TimeSpan RaceTime { get; set; }
 
         public decimal TyresPressure { get; set; }
