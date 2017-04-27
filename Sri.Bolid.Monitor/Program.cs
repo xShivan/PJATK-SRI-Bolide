@@ -8,6 +8,7 @@ namespace Sri.Bolid.Monitor
     class Program
     {
         private static readonly CarParamsAnalyzer carParamsAnalyzer = new CarParamsAnalyzer();
+        private static readonly CarParamsWarningPublisher carParamsWarningPublisher = new CarParamsWarningPublisher();
 
         static void Main(string[] args)
         {
@@ -23,7 +24,8 @@ namespace Sri.Bolid.Monitor
         private static void HandleCarParamsReceived(object model, BasicDeliverEventArgs ea)
         {
             CarParams carParams = CarParams.Deserialize(ea.Body);
-            carParamsAnalyzer.Analyze(carParams);
+            WarningLevel warning = carParamsAnalyzer.Analyze(carParams);
+            carParamsWarningPublisher.Publish(warning);
         }
     }
 }

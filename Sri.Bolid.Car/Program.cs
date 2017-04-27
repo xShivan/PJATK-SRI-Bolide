@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using Sri.Bolid.Car.Providers;
 using Sri.Bolid.Shared;
 using Timer = System.Timers.Timer;
@@ -18,11 +20,13 @@ namespace Sri.Bolid.Car
         private const int raceTimerInterval = 10;
 
         private static readonly CarParamsProvider carParamsProvider = new CarParamsProvider();
+        private static readonly CarParamsWarningConsumer carParamsWarningConsumer = new CarParamsWarningConsumer(ParamsReceivedEventHandler);
 
         private static long raceMiliseconds = 0;
 
         static void Main(string[] args)
         {
+            Task.Run(() => carParamsWarningConsumer.Consume());
             StartTimers();
 
             while (true)
@@ -62,6 +66,13 @@ namespace Sri.Bolid.Car
                         body: CarParams.Serialize(carParams));
                 }
             }
+        }
+
+        private static void ParamsReceivedEventHandler(object o, BasicDeliverEventArgs basicDeliverEventArgs)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Warning received");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
     }
 }
