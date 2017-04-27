@@ -49,6 +49,7 @@
     <Compile Include="CarParams.cs" />
     <Compile Include="CarParamsConsumer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WarningLevel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -18,44 +18,48 @@ namespace Sri.Bolid.Monitor
 
         private decimal lv2WarningPressure => Convert.ToDecimal((double)CarParams.MaxPressure * 0.9);
 
-        public void Analyze(CarParams carParams)
+        public WarningLevel Analyze(CarParams carParams)
         {
-            short pressureExceeded = 0, engineTempExceeded = 0, radiatorFluidTempExceeded = 0;
+            WarningLevel pressureExceeded = WarningLevel.None, engineTempExceeded = WarningLevel.None, radiatorFluidTempExceeded = WarningLevel.None;
+
             if (carParams.TyresPressure > lv1WarningPressure)
             {
-                pressureExceeded = 1;
-                if (carParams.TyresPressure > lv2WarningPressure) pressureExceeded = 2;
+                pressureExceeded = WarningLevel.Lv1;
+                if (carParams.TyresPressure > lv2WarningPressure) pressureExceeded = WarningLevel.Lv2;
             }
 
             if (carParams.EngineTemperature > lv1WarningTemperature)
             {
-                engineTempExceeded = 1;
-                if (carParams.EngineTemperature > lv2WarningTemperature) engineTempExceeded = 2;
+                engineTempExceeded = WarningLevel.Lv1;
+                if (carParams.EngineTemperature > lv2WarningTemperature) engineTempExceeded = WarningLevel.Lv2;
             }
 
             if (carParams.RadiatorFluidTemperature > lv1WarningTemperature)
             {
-                radiatorFluidTempExceeded = 1;
-                if (carParams.RadiatorFluidTemperature > lv2WarningTemperature) radiatorFluidTempExceeded = 2;
+                radiatorFluidTempExceeded = WarningLevel.Lv1;
+                if (carParams.RadiatorFluidTemperature > lv2WarningTemperature) radiatorFluidTempExceeded = WarningLevel.Lv2;
             }
 
-            if (pressureExceeded != 0 || engineTempExceeded != 0 || radiatorFluidTempExceeded != 0)
+            if (pressureExceeded != WarningLevel.None || engineTempExceeded != WarningLevel.None || radiatorFluidTempExceeded != WarningLevel.None)
             {
                 this.PrintCarParam(pressureExceeded, $"Tyres press.: {carParams.TyresPressure}");
                 this.PrintCarParam(radiatorFluidTempExceeded, $"Radiator fluid temp.: {carParams.RadiatorFluidTemperature}");
                 this.PrintCarParam(engineTempExceeded, $"Engine temp press.: {carParams.EngineTemperature}");
                 Console.WriteLine();
+                return (WarningLevel)Math.Max((int)pressureExceeded, Math.Max((int)engineTempExceeded, (int)radiatorFluidTempExceeded));
             }
+
+            return WarningLevel.None;
         }
 
-        private void PrintCarParam(short isExceeded, string text)
+        private void PrintCarParam(WarningLevel warningLevel, string text)
         {
-            switch (isExceeded)
+            switch (warningLevel)
             {
-                case 1:
+                case WarningLevel.Lv1:
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     break;
-                case 2:
+                case WarningLevel.Lv2:
                     Console.ForegroundColor = ConsoleColor.Red;
                     break;
                 default:
