@@ -12,7 +12,7 @@ namespace Sri.Bolid.Monitor
 
         static void Main(string[] args)
         {
-            var carParamsConsumer = new CarParamsConsumer(HandleCarParamsReceived);
+            var carParamsConsumer = ConsumerFactory.Create("car_info", "fanout", string.Empty, HandleCarParamsReceived);
             Task.Run(() => carParamsConsumer.Consume());
 
             Console.WriteLine("Press [enter] to exit.");

@@ -49,6 +49,8 @@
     <Compile Include="CarParams.cs" />
     <Compile Include="CarParamsConsumer.cs" />
     <Compile Include="CarParamsWarningConsumer.cs" />
+    <Compile Include="Consumer.cs" />
+    <Compile Include="ConsumerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Warning.cs" />
     <Compile Include="WarningLevel.cs" />

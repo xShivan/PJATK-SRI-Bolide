@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Sri.Bolid.Car.Providers;
 using Sri.Bolid.Shared;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using Timer = System.Timers.Timer;
 
 namespace Sri.Bolid.Car
@@ -20,7 +17,7 @@ namespace Sri.Bolid.Car
         private const int raceTimerInterval = 10;
 
         private static readonly CarParamsProvider carParamsProvider = new CarParamsProvider();
-        private static readonly CarParamsWarningConsumer carParamsWarningConsumer = new CarParamsWarningConsumer(ParamsReceivedEventHandler);
+        private static readonly Consumer carParamsWarningConsumer = ConsumerFactory.Create("car_health", "topic", "warning.*", ParamsReceivedEventHandler);
 
         private static long raceMiliseconds = 0;
 
@@ -72,7 +69,7 @@ namespace Sri.Bolid.Car
         {
             Warning warning = Warning.Deserialize(basicDeliverEventArgs.Body);
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write($"Warning received: ");
+            Console.Write("Warning received: ");
             CarParams.Print(warning.TyresPressureWarningLevel, $"Tyres pressure - {warning.TyresPressureWarningLevel}");
             CarParams.Print(warning.RadiatorFluidTempWarningLevel, $"Radiator fluid temperature - {warning.RadiatorFluidTempWarningLevel}");
             CarParams.Print(warning.EngineTempWarningLevel, $"Engine temperature - {warning.EngineTempWarningLevel}");

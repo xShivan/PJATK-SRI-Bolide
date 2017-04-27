@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
+﻿using RabbitMQ.Client.Events;
 using Sri.Bolid.Shared;
+using System;
 using System.Configuration;
+using System.Threading.Tasks;
 
 namespace Sri.Bolid.Logger
 {
@@ -17,7 +12,7 @@ namespace Sri.Bolid.Logger
 
         private static void Main(string[] args)
         {
-            var carParamsConsumer = new CarParamsConsumer(HandleCarParamsReceived);
+            var carParamsConsumer = ConsumerFactory.Create("car_info", "fanout", string.Empty, HandleCarParamsReceived);
             Task.Run(() => carParamsConsumer.Consume());
 
             Console.WriteLine("Press [enter] to exit.");
