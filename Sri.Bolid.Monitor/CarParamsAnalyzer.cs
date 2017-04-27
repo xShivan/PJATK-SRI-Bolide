@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using Sri.Bolid.Shared;
+﻿using Sri.Bolid.Shared;
+using System;
 
 namespace Sri.Bolid.Monitor
 {
@@ -18,7 +13,7 @@ namespace Sri.Bolid.Monitor
 
         private decimal lv2WarningPressure => Convert.ToDecimal((double)CarParams.MaxPressure * 0.9);
 
-        public WarningLevel Analyze(CarParams carParams)
+        public Warning Analyze(CarParams carParams)
         {
             WarningLevel pressureExceeded = WarningLevel.None, engineTempExceeded = WarningLevel.None, radiatorFluidTempExceeded = WarningLevel.None;
 
@@ -42,35 +37,20 @@ namespace Sri.Bolid.Monitor
 
             if (pressureExceeded != WarningLevel.None || engineTempExceeded != WarningLevel.None || radiatorFluidTempExceeded != WarningLevel.None)
             {
-                this.PrintCarParam(pressureExceeded, $"Tyres press.: {carParams.TyresPressure}");
-                this.PrintCarParam(radiatorFluidTempExceeded, $"Radiator fluid temp.: {carParams.RadiatorFluidTemperature}");
-                this.PrintCarParam(engineTempExceeded, $"Engine temp press.: {carParams.EngineTemperature}");
+                CarParams.Print(pressureExceeded, $"Tyres press.: {carParams.TyresPressure}");
+                CarParams.Print(radiatorFluidTempExceeded, $"Radiator fluid temp.: {carParams.RadiatorFluidTemperature}");
+                CarParams.Print(engineTempExceeded, $"Engine temp press.: {carParams.EngineTemperature}");
                 Console.WriteLine();
-                return (WarningLevel)Math.Max((int)pressureExceeded, Math.Max((int)engineTempExceeded, (int)radiatorFluidTempExceeded));
+                //return (WarningLevel)Math.Max((int)pressureExceeded, Math.Max((int)engineTempExceeded, (int)radiatorFluidTempExceeded));
             }
 
-            return WarningLevel.None;
-        }
-
-        private void PrintCarParam(WarningLevel warningLevel, string text)
-        {
-            switch (warningLevel)
+            return new Warning()
             {
-                case WarningLevel.Lv1:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    break;
-                case WarningLevel.Lv2:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    break;
-                default:
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    break;
-            }
-
-            Console.Write(text);
-            Console.Write(" ");
-
-            Console.ForegroundColor = ConsoleColor.Gray;
+                CarParams = carParams,
+                EngineTempWarningLevel = engineTempExceeded,
+                RadiatorFluidTempWarningLevel = radiatorFluidTempExceeded,
+                TyresPressureWarningLevel = pressureExceeded
+            };
         }
     }
 }

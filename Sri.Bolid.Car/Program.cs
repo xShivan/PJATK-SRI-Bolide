@@ -70,9 +70,13 @@ namespace Sri.Bolid.Car
 
         private static void ParamsReceivedEventHandler(object o, BasicDeliverEventArgs basicDeliverEventArgs)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Warning received");
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Warning warning = Warning.Deserialize(basicDeliverEventArgs.Body);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write($"Warning received: ");
+            CarParams.Print(warning.TyresPressureWarningLevel, $"Tyres pressure - {warning.TyresPressureWarningLevel}");
+            CarParams.Print(warning.RadiatorFluidTempWarningLevel, $"Radiator fluid temperature - {warning.RadiatorFluidTempWarningLevel}");
+            CarParams.Print(warning.EngineTempWarningLevel, $"Engine temperature - {warning.EngineTempWarningLevel}");
+            Console.WriteLine();
         }
     }
 }

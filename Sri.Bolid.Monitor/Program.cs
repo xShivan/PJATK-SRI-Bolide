@@ -24,8 +24,10 @@ namespace Sri.Bolid.Monitor
         private static void HandleCarParamsReceived(object model, BasicDeliverEventArgs ea)
         {
             CarParams carParams = CarParams.Deserialize(ea.Body);
-            WarningLevel warning = carParamsAnalyzer.Analyze(carParams);
-            carParamsWarningPublisher.Publish(warning);
+            Warning warning = carParamsAnalyzer.Analyze(carParams);
+
+            if (warning.EngineTempWarningLevel != WarningLevel.None || warning.RadiatorFluidTempWarningLevel != WarningLevel.None || warning.TyresPressureWarningLevel != WarningLevel.None)
+                carParamsWarningPublisher.Publish(warning);
         }
     }
 }

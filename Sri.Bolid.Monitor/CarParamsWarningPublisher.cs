@@ -6,7 +6,7 @@ namespace Sri.Bolid.Monitor
 {
     public class CarParamsWarningPublisher
     {
-        public void Publish(WarningLevel warningLevel)
+        public void Publish(Warning warning)
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
@@ -15,12 +15,17 @@ namespace Sri.Bolid.Monitor
                 {
                     channel.ExchangeDeclare(exchange: "car_health", type: "topic");
                     channel.BasicPublish(exchange: "car_health",
-                        routingKey: $"warning.{warningLevel}",
+                        routingKey: $"warning.{GetWarningLevel(warning)}",
                         basicProperties: null,
-                        body: null);
-                    Console.WriteLine($"{warningLevel} warning published!");
+                        body: Warning.Serialize(warning));
+                    Console.WriteLine($"{GetWarningLevel(warning)} warning published!");
                 }
             }
+        }
+
+        private WarningLevel GetWarningLevel(Warning warning)
+        {
+            return (WarningLevel)Math.Max((int)warning.EngineTempWarningLevel, Math.Max((int)warning.RadiatorFluidTempWarningLevel, (int)warning.TyresPressureWarningLevel));
         }
     }
 }

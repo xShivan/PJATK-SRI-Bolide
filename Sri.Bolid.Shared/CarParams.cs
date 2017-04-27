@@ -9,9 +9,9 @@ namespace Sri.Bolid.Shared
     public class CarParams
     {
         public const decimal MaxPressure = 3;
-        public const decimal MinPressure = 2;
-        public const decimal MinTemperature = 50;
-        public const decimal MaxTemperature = 150;
+        public const decimal MinPressure = 1.5M;
+        public const decimal MinTemperature = 30;
+        public const decimal MaxTemperature = 200;
 
         public TimeSpan RaceTime { get; set; }
 
@@ -48,6 +48,27 @@ namespace Sri.Bolid.Shared
                 stream.Seek(0, SeekOrigin.Begin);
                 return (CarParams)formatter.Deserialize(stream);
             }
+        }
+
+        public static void Print(WarningLevel warningLevel, string text)
+        {
+            switch (warningLevel)
+            {
+                case WarningLevel.Lv1:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+                case WarningLevel.Lv2:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                default:
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    break;
+            }
+
+            Console.Write(text);
+            Console.Write(" ");
+
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
     }
 }
