@@ -1,16 +1,19 @@
 ﻿using RabbitMQ.Client.Events;
 using Sri.Bolid.Shared;
 using System;
+using System.Threading.Tasks;
 
 namespace Sri.Bolid.PitStop
 {
     class Program
     {
         private static readonly Consumer carParamsWarningConsumer = ConsumerFactory.Create("car_health", "topic", $"warning.{WarningLevel.Lv2}", ParamsReceivedEventHandler);
+        private static readonly PitStopReplier pitStopReplier = new PitStopReplier();
 
         static void Main(string[] args)
         {
-            carParamsWarningConsumer.Consume();
+            Task.Run(() => carParamsWarningConsumer.Consume());
+            Task.Run(() => pitStopReplier.Reply());
 
             Console.WriteLine("Press [enter] to exit.");
             Console.ReadLine();

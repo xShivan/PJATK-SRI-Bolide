@@ -3,6 +3,7 @@ using RabbitMQ.Client.Events;
 using Sri.Bolid.Car.Providers;
 using Sri.Bolid.Shared;
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -74,6 +75,16 @@ namespace Sri.Bolid.Car
             CarParams.Print(warning.RadiatorFluidTempWarningLevel, $"Radiator fluid temperature - {warning.RadiatorFluidTempWarningLevel}");
             CarParams.Print(warning.EngineTempWarningLevel, $"Engine temperature - {warning.EngineTempWarningLevel}");
             Console.WriteLine();
+
+            RequestPitStop(warning.CarParams);
+        }
+
+        private static void RequestPitStop(CarParams carParams)
+        {
+            // TODO: use car params
+            var pitStopRequester = new PitStopRequester();
+            PitStopRequestReply pitStopRequestReply = pitStopRequester.Request(new PitStopRequest());
+            pitStopRequester.Stop();
         }
     }
 }
