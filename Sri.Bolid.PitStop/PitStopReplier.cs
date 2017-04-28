@@ -12,12 +12,9 @@ namespace Sri.Bolid.PitStop
 {
     class PitStopReplier
     {
+        private Random random = new Random();
+
         private bool isConsuming = false;
-
-        public PitStopReplier()
-        {
-
-        }
 
         public void Reply()
         {
@@ -32,21 +29,31 @@ namespace Sri.Bolid.PitStop
                     var consumer = new EventingBasicConsumer(channel);
                     channel.BasicConsume(queue: "rpc_queue",
                         noAck: false, consumer: consumer);
-                    Console.WriteLine(" [x] Awaiting RPC requests");
-
 
                     consumer.Received += (model, ea) =>
                     {
-                        Console.WriteLine("PIT STOP REQUEST RECEIVED!!!");
-                        PitStopRequestReply response = null;
+                        var pitStopRequest = PitStopRequest.Deserialize(ea.Body);
 
-                        var body = ea.Body;
+                        Console.Write($"Stop request received: [{pitStopRequest.Message}] - ");
+                        bool accept = this.random.Next(0, 10) > 5;
+                        if (accept)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Accepted");
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Rejected");
+                        }
+                        Console.ForegroundColor = ConsoleColor.Gray;
+
+
+                        PitStopRequestReply response = new PitStopRequestReply() { IsAccepted = accept };
+
                         var props = ea.BasicProperties;
                         var replyProps = channel.CreateBasicProperties();
                         replyProps.CorrelationId = props.CorrelationId;
-
-                        var pitStopRequest = PitStopRequest.Deserialize(body);
-                        response = new PitStopRequestReply(); // TODO: put some params inside
 
                         channel.BasicPublish(exchange: "", routingKey: props.ReplyTo,
                             basicProperties: replyProps, body: PitStopRequestReply.Serialize(response));

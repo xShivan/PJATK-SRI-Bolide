@@ -7,6 +7,8 @@ namespace Sri.Bolid.Shared
     [Serializable]
     public class PitStopRequest
     {
+        public string Message { get; set; }
+
         public static byte[] Serialize(PitStopRequest pitStopRequest)
         {
             using (MemoryStream stream = new MemoryStream())

@@ -7,6 +7,8 @@ namespace Sri.Bolid.Shared
     [Serializable]
     public class PitStopRequestReply
     {
+        public bool IsAccepted { get; set; }
+
         public static byte[] Serialize(PitStopRequestReply pitStopRequest)
         {
             using (MemoryStream stream = new MemoryStream())

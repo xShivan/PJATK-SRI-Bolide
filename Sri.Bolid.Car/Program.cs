@@ -76,15 +76,18 @@ namespace Sri.Bolid.Car
             CarParams.Print(warning.EngineTempWarningLevel, $"Engine temperature - {warning.EngineTempWarningLevel}");
             Console.WriteLine();
 
-            RequestPitStop(warning.CarParams);
+            if (warning.EngineTempWarningLevel == WarningLevel.Lv2 || warning.RadiatorFluidTempWarningLevel == WarningLevel.Lv2 || warning.TyresPressureWarningLevel == WarningLevel.Lv2)
+                RequestPitStop(warning.CarParams);
         }
 
         private static void RequestPitStop(CarParams carParams)
         {
-            // TODO: use car params
+            Console.WriteLine("Pit stop requested!");
             var pitStopRequester = new PitStopRequester();
-            PitStopRequestReply pitStopRequestReply = pitStopRequester.Request(new PitStopRequest());
+            PitStopRequestReply pitStopRequestReply = pitStopRequester.Request(new PitStopRequest() { Message = $"Requesting PitStop from bolide! - {carParams}" });
             pitStopRequester.Stop();
+
+            Console.WriteLine(pitStopRequestReply.IsAccepted ? "PitStop accepted!" : "PitStop denied!");
         }
     }
 }
